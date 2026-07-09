@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-// ==========================================
-// 1. THE MODEL
-// ==========================================
+// -----------------
+// Model
+// -----------------
 class ButtonStatus {
   final String name;
   final bool selected;
@@ -18,9 +18,9 @@ class ButtonStatus {
   }
 }
 
-// ==========================================
-// 2. THE REPOSITORY
-// ==========================================
+// -------------------
+// the repository
+// -------------------
 class ButtonRepository {
   final String _baseUrl =
       "https://fir-2c4d8-default-rtdb.asia-southeast1.firebasedatabase.app/.json";
@@ -32,7 +32,6 @@ class ButtonRepository {
   }
 }
 
-// Helper class to manage the 3 states of our asynchronous operation
 class AsyncData<T> {
   final T? value;
   final String? error;
@@ -43,9 +42,6 @@ class AsyncData<T> {
   AsyncData.error(this.error) : value = null, isLoading = false;
 }
 
-// ==========================================
-// 3. THE UI & FLUTTER APPLICATION
-// ==========================================
 void main() {
   runApp(
     const MaterialApp(debugShowCheckedModeBanner: false, home: ButtonScreen()),
@@ -59,18 +55,22 @@ class ButtonScreen extends StatefulWidget {
 }
 
 class _ButtonScreenState extends State<ButtonScreen> {
-  // Start with a loading state [cite: 34]
+  //----------
+  // loading
+  //----------
   AsyncData<ButtonStatus> data = AsyncData.loading();
   final ButtonRepository _repository = ButtonRepository();
-
-  // Overwrite the initState method to fetch button data from firebase 
+  //-----------------------------------
+  //method to fetch data from firebase 
+  //-----------------------------------
   @override
   void initState() {
     super.initState();
     _fetchButtonData(); 
   }
-
-  // Implement the fetchButtonData and handle the 3 states 
+  //------------------------------------------------------
+  // Implement the fetchButtonData and handle the 3 state
+  //------------------------------------------------------
   void _fetchButtonData() async {
     setState(() => data = AsyncData.loading()); 
     try {
@@ -86,24 +86,21 @@ class _ButtonScreenState extends State<ButtonScreen> {
     return Scaffold(
       body: Center(
         child: data.isLoading
-            ? const CircularProgressIndicator() // State 1: Loading
+            ? const CircularProgressIndicator() 
             : data.error != null
-            ? Text("Error: ${data.error}") // State 2: Error 
+            ? Text("Error: ${data.error}")
             : SizedBox(
                 width: 250,
                 height: 60,
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                    // Dynamic background color depending on selection 
                     backgroundColor: data.value!.selected
                         ? Colors.lightBlue.shade300
                         : Colors.transparent,
                     side: const BorderSide(color: Colors.grey),
-                    shape: const StadiumBorder(), // Makes it rounded 
+                    shape: const StadiumBorder(), 
                   ),
-                  onPressed: () {
-                    // Optional: You can trigger _fetchButtonData() here to refresh manually
-                  },
+                  onPressed: () {},
                   child: Text(
                     data.value!.name.toUpperCase(),
                     style: const TextStyle(
