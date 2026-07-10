@@ -14,7 +14,6 @@ class ButtonStatus {
     );
   }
 }
-
 // -------------------
 // the repository
 // -------------------
@@ -27,6 +26,13 @@ class ButtonRepository {
     if (response.statusCode != 200) throw Exception("Error fetching data");
     return ButtonStatus.fromJson(jsonDecode(response.body));
   }
+
+  Future<ButtonStatus> UpdateButtonStatus() async {
+    final response = await http.patch(Uri.parse(_baseUrl));
+    if (response.statusCode != 200) throw Exception("Error fetching data");
+    return ButtonStatus.fromJson(jsonDecode(response.body));
+  }
+
 }
 
 class AsyncData<T> {
@@ -58,23 +64,24 @@ class _ButtonScreenState extends State<ButtonScreen> {
   AsyncData<ButtonStatus> data = AsyncData.loading();
   final ButtonRepository _repository = ButtonRepository();
   //-----------------------------------
-  //method to fetch data from firebase 
+  //method to fetch data from firebase
   //-----------------------------------
   @override
   void initState() {
     super.initState();
-    _fetchButtonData(); 
+    _fetchButtonData();
   }
+
   //------------------------------------------------------
   // Implement the fetchButtonData and handle the 3 state
   //------------------------------------------------------
   void _fetchButtonData() async {
-    setState(() => data = AsyncData.loading()); 
+    setState(() => data = AsyncData.loading());
     try {
       final result = await _repository.getButtonStatus();
-      setState(() => data = AsyncData.success(result)); 
+      setState(() => data = AsyncData.success(result));
     } catch (e) {
-      setState(() => data = AsyncData.error(e.toString())); 
+      setState(() => data = AsyncData.error(e.toString()));
     }
   }
 
@@ -83,7 +90,7 @@ class _ButtonScreenState extends State<ButtonScreen> {
     return Scaffold(
       body: Center(
         child: data.isLoading
-            ? const CircularProgressIndicator() 
+            ? const CircularProgressIndicator()
             : data.error != null
             ? Text("Error: ${data.error}")
             : SizedBox(
@@ -95,7 +102,7 @@ class _ButtonScreenState extends State<ButtonScreen> {
                         ? Colors.lightBlue.shade300
                         : Colors.transparent,
                     side: const BorderSide(color: Colors.grey),
-                    shape: const StadiumBorder(), 
+                    shape: const StadiumBorder(),
                   ),
                   onPressed: () {},
                   child: Text(

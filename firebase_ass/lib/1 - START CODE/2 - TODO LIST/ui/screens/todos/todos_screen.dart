@@ -30,7 +30,7 @@ class _TodosScreenState extends State<TodosScreen> {
     TodoRepository repository = TodoRepository.global;
     //----------------------------------------------------------------------------
     //                       first step that i do
-    // i fect data from TodoRepository class in fiels todo_repository
+    // i fect data from TodoRepository class in file todo_repository
     //----------------------------------------------------------------------------
     // ------------------------- fect data ---------------------------------------
     setState(() {
@@ -48,13 +48,6 @@ class _TodosScreenState extends State<TodosScreen> {
       });
     }
     // ---------------------------------------------------------------------------
-    //  TODO
-    // Fetch the list of todos from the repo
-    // Handle the success, loading and error cases (catch exception)
-    // Update the widget state (asyncData)
-
-    // List<Todo> todos = await repository.getTodos();
-    // setState(() => asyncData = AsyncData.success(todos),);
   }
 
   void onUpdateCompleted(Todo todo) async {

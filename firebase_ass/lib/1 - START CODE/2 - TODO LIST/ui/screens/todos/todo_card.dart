@@ -11,7 +11,6 @@ class TodoCard extends StatelessWidget {
   //  TODO
   //  Update the widget to disaply both state (completed / not completed) as required
   //
-
   //----------------------------------------------------------------------------------------------
   //                                  The second step 
   //                            if complete (TextDecoration)
