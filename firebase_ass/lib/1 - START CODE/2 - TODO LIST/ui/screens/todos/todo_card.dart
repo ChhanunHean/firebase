@@ -12,8 +12,7 @@ class TodoCard extends StatelessWidget {
   //  Update the widget to disaply both state (completed / not completed) as required
   //
   //----------------------------------------------------------------------------------------------
-  //                                  The second step 
-  //                            if complete (TextDecoration)
+  //                                  Step 2
   //----------------------------------------------------------------------------------------------
   TextDecoration? get textDecoration =>
       todo.completed ? TextDecoration.lineThrough : null;
@@ -62,8 +61,7 @@ class CheckBox extends StatelessWidget {
   //  Update the widget to disaply both state (completed / not completed) as required
   //
   //----------------------------------------------------------------------------------------------
-  //                                    The second step
-  //                            check BoxBoder, Color, Widdget.
+  //                                    Step 2
   //----------------------------------------------------------------------------------------------
   BoxBorder? get border =>
       checked ? null : Border.all(width: 2, color: AppTheme.yellowColor);
