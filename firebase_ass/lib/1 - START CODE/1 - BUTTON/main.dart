@@ -27,10 +27,15 @@ class ButtonRepository {
     return ButtonStatus.fromJson(jsonDecode(response.body));
   }
 
-  Future<ButtonStatus> UpdateButtonStatus() async {
-    final response = await http.patch(Uri.parse(_baseUrl));
-    if (response.statusCode != 200) throw Exception("Error fetching data");
-    return ButtonStatus.fromJson(jsonDecode(response.body));
+  Future<void> updateButtonStatus(bool newSelected) async {
+    final response = await http.patch(
+      Uri.parse(_baseUrl),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "selected": newSelected,
+      }),
+    );
+    if (response.statusCode != 200) throw Exception("Error updating data");
   }
 
 }
@@ -85,6 +90,24 @@ class _ButtonScreenState extends State<ButtonScreen> {
     }
   }
 
+void _toggleButton() async {
+    if (data.value == null) return;
+    final currentName = data.value!.name;
+    final newSelected = !data.value!.selected;
+
+    setState(() => data = AsyncData.loading());
+    try {
+      await _repository.updateButtonStatus(newSelected); 
+      setState(
+        () => data = AsyncData.success(
+          ButtonStatus(name: currentName, selected: newSelected),
+        ),
+      );
+    } catch (e) {
+      setState(() => data = AsyncData.error(e.toString()));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,7 +127,7 @@ class _ButtonScreenState extends State<ButtonScreen> {
                     side: const BorderSide(color: Colors.grey),
                     shape: const StadiumBorder(),
                   ),
-                  onPressed: () {},
+                  onPressed: _toggleButton,
                   child: Text(
                     data.value!.name.toUpperCase(),
                     style: const TextStyle(

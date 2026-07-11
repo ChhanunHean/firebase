@@ -29,7 +29,7 @@ class _TodosScreenState extends State<TodosScreen> {
   void _fetchTodos() async {
     TodoRepository repository = TodoRepository.global;
     //----------------------------------------------------------------------------
-    //                       first step that i do
+    //                                step 1
     // i fect data from TodoRepository class in file todo_repository
     //----------------------------------------------------------------------------
     // ------------------------- fect data ---------------------------------------
@@ -52,13 +52,22 @@ class _TodosScreenState extends State<TodosScreen> {
 
   void onUpdateCompleted(Todo todo) async {
     TodoRepository repository = TodoRepository.global;
+    //------------------------------------------------------------------------------------
+    //                                        Step 5
+    //------------------------------------------------------------------------------------
+    final updatedTodo = todo.copyWith(!todo.completed);
+    final updatedList = asyncData.value!
+        .map((t) => t.id == todo.id ? updatedTodo : t)
+        .toList();
+    setState(() => asyncData = AsyncData.success(updatedList));
 
-    //  TODO
-    // Update the todo from the repo
-    // Handle the success, loading and error cases (catch exception)
-    // Update the widget state (asyncData)
+    try {
+      await repository.updateCompleted(todo.id, !todo.completed);
+    } on RepositoryException catch (e) {
+      setState(() => asyncData = AsyncData.error(e.message));
+    }
+    //------------------------------------------------------------------------------------
 
-    // ! we dont reload the full list, we update directly the modified Todo in the cache (asyncData)
   }
 
   Widget get content => switch (asyncData.status) {
