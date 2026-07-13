@@ -55,21 +55,36 @@ class _TodosScreenState extends State<TodosScreen> {
     //------------------------------------------------------------------------------------
     //                                        Step 5
     //------------------------------------------------------------------------------------
-    // final updatedTodo = todo.copyWith(!todo.completed); // after teacher ask me and want me to change it now i back to the old method this method just selt study to understand more
+    // final updatedTodo = todo.copyWith(!todo.completed); 
+     // final updatedList = asyncData.value!
+    //     .map((t) => t.id == todo.id ? updatedTodo : t)
+    //     .toList();
+    // setState(() => asyncData = AsyncData.success(updatedList));
+
+    // try {
+    //   await repository.updateCompleted(todo.id, !todo.completed);
+    // } on RepositoryException catch (e) {
+    //   setState(() => asyncData = AsyncData.error(e.message));
+    // }
+    // after teacher ask me and want me to change it now i back to the old method this method just selt study to understand more
     final updatedTodo = Todo(
       id: todo.id,
       title: todo.title,
       completed: !todo.completed
     );
-    final updatedList = asyncData.value!
-        .map((t) => t.id == todo.id ? updatedTodo : t)
-        .toList();
-    setState(() => asyncData = AsyncData.success(updatedList));
-
     try {
-      await repository.updateCompleted(todo.id, !todo.completed);
-    } on RepositoryException catch (e) {
-      setState(() => asyncData = AsyncData.error(e.message));
+      await repository.updateCompleted(todo.id, updatedTodo.completed);
+      List<Todo> todos = [];
+      for (Todo t in asyncData.value!) {
+        if (t.id == todo.id) {
+          todos.add(updatedTodo);
+        } else {
+          todos.add(t);
+        }
+      }
+      setState(() => asyncData = AsyncData.success(todos));
+    } catch (e) {
+      setState(() => asyncData = AsyncData.error(e.toString()));
     }
     //------------------------------------------------------------------------------------
   }
