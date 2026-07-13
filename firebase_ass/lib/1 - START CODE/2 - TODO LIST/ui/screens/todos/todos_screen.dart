@@ -55,7 +55,12 @@ class _TodosScreenState extends State<TodosScreen> {
     //------------------------------------------------------------------------------------
     //                                        Step 5
     //------------------------------------------------------------------------------------
-    final updatedTodo = todo.copyWith(!todo.completed);
+    // final updatedTodo = todo.copyWith(!todo.completed); // after teacher ask me and want me to change it now i back to the old method this method just selt study to understand more
+    final updatedTodo = Todo(
+      id: todo.id,
+      title: todo.title,
+      completed: !todo.completed
+    );
     final updatedList = asyncData.value!
         .map((t) => t.id == todo.id ? updatedTodo : t)
         .toList();
@@ -67,7 +72,6 @@ class _TodosScreenState extends State<TodosScreen> {
       setState(() => asyncData = AsyncData.error(e.message));
     }
     //------------------------------------------------------------------------------------
-
   }
 
   Widget get content => switch (asyncData.status) {
